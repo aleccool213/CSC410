@@ -69,6 +69,7 @@ class OpenInterval{
     }
 
     /*@ requires x != null;
+
       @ ensures (this.low != x.low || this.high != high) ==> (\result == false);
       @*/
     public /*@ pure */ boolean equals(OpenInterval x){
