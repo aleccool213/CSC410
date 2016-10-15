@@ -33,28 +33,44 @@ class OpenInterval{
     //@ invariant low <= high;
 
     // Creates an non-empty interval.
+    /*@ requires low <= high;
+      @ ensures this.low == low;
+      @ ensures this.high == high;
+      @*/
     public OpenInterval(int low, int high){
 	this.low = low;
 	this.high = high;
     }
 
     // Creates an empty interval.
+    /*@
+      @ ensures this.low == x;
+      @ ensures this.high == x;
+      @*/
     public OpenInterval(int x){
 	this.low = x;
 	this.high = x;
-    }	
+    }
      
     // Returns lower bound.
+   /*@ 
+     @ ensures \result == this.low;
+     @*/
     public int getLow(){
 	return this.low;
     }
 
     // Returns upper bound.
+    /*@ 
+      @ ensures \result == this.high;
+      @*/
     public int getHigh(){
 	return this.high;
     }
 
-    //@ requires x != null;
+    /*@ requires x != null;
+      @ ensures (this.low != x.low || this.high != high) ==> (\result == false);
+      @*/
     public /*@ pure */ boolean equals(OpenInterval x){
 	return (this.low == x.low && this.high == x.high);
     }
