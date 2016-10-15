@@ -12,8 +12,12 @@ public class IntervalDriver {
       @*/
     OpenInterval joinIntervals(OpenInterval i1, OpenInterval i2) {
 	// Returns empty interval if i1 and i2 are non-overlapping.
+<<<<<<< HEAD
 	if ( (i1.getHigh() > i2.getLow() && i2.getHigh() > i1.getLow()) 
              || (i2.getHigh() > i1.getLow() && i1.getHigh() > i2.getLow()) ) {
+=======
+	if (i1.getHigh() < i2.getLow() || i2.getHigh() < i1.getLow()) {
+>>>>>>> 0c536cd6404da33f61d4a987b166c86368105646
 	    return new OpenInterval(0);
 	}
 
@@ -44,6 +48,7 @@ class OpenInterval{
     }
 
     // Creates an empty interval.
+<<<<<<< HEAD
     //@ensures this.low == this.high;
     public OpenInterval(int x){
 	this.low = x;
@@ -52,17 +57,40 @@ class OpenInterval{
      
     // Returns lower bound.
     //@ensures \result == this.low;
+=======
+    /*@
+      @ ensures this.low == x;
+      @ ensures this.high == x;
+      @*/
+    public OpenInterval(int x){
+	this.low = x;
+	this.high = x;
+    }
+     
+    // Returns lower bound.
+   /*@ 
+     @ ensures \result == this.low;
+     @*/
+>>>>>>> 0c536cd6404da33f61d4a987b166c86368105646
     public int getLow(){
 	return this.low;
     }
 
     // Returns upper bound.
+<<<<<<< HEAD
     //@ensures \result == this.high;
+=======
+    /*@ 
+      @ ensures \result == this.high;
+      @*/
+>>>>>>> 0c536cd6404da33f61d4a987b166c86368105646
     public int getHigh(){
 	return this.high;
     }
 
-    //@ requires x != null;
+    /*@ requires x != null;
+      @ ensures (this.low != x.low || this.high != high) ==> (\result == false);
+      @*/
     public /*@ pure */ boolean equals(OpenInterval x){
 	return (this.low == x.low && this.high == x.high);
     }

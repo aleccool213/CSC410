@@ -26,12 +26,15 @@ method benda(L:array<int>, v0:int, v1:int) returns (x:int, y:int)
   i,x,y := 0,v0,v1;
   while (i < L.Length)
     // You must provide appropriate loop invariants here
+<<<<<<< HEAD
     invariant 0 <= i <= L.Length
     //invariant forall J::0 <= j < L.Length
     //invariant forall k::0 <= k < i ==> L[k] == k
     invariant forall i::0 <= i < L.Length ==> 0 <= L[i] < L.Length
     invariant x != v0 ==> (x == v1 && y == v0)
-    //invariant y == v1 && x == v0 ==> x == v0
+    invariant y == v1 && x == v0 ==> x == v0
+=======
+>>>>>>> 0c536cd6404da33f61d4a987b166c86368105646
     {       
     if (L[i] != i) { // if mind of i does not match with body i
       x,L[i] := L[i],x; // swap mind between i and x
@@ -59,6 +62,7 @@ method benda(L:array<int>, v0:int, v1:int) returns (x:int, y:int)
 // https://en.wikipedia.org/wiki/Cyclic_permutation
 method cycle(L:array<int>, i:int, a:int, s:set<int>) returns (x:int)
   // You must provide appropriate pre-conditions here.
+<<<<<<< HEAD
   requires L != null
   requires 0 <= a < L.Length
   modifies L
@@ -70,6 +74,11 @@ method cycle(L:array<int>, i:int, a:int, s:set<int>) returns (x:int)
   ensures 0 <= x < L.Length
 //  ensures L[a] == i ==> x == a
     ensures forall d::0 <= d < L.Length ==> 0 <= L[d] < L.Length
+=======
+  modifies L;
+  decreases s; 
+  // You must provide appropriate post-conditions here.
+>>>>>>> 0c536cd6404da33f61d4a987b166c86368105646
 { 
   x := a;
   if (L[x] != i) { // mind and body do not match.
