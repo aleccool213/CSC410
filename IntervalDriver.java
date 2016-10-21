@@ -12,7 +12,8 @@ public class IntervalDriver {
       @*/
     OpenInterval joinIntervals(OpenInterval i1, OpenInterval i2) {
 	// Returns empty interval if i1 and i2 are non-overlapping.
-	if (i1.getHigh() < i2.getLow() || i2.getHigh() < i1.getLow()) {
+	if ( (i1.getHigh() > i2.getLow() && i2.getHigh() > i1.getLow()) 
+             || (i2.getHigh() > i1.getLow() && i1.getHigh() > i2.getLow()) ) {
 	    return new OpenInterval(0);
 	}
 
@@ -43,27 +44,20 @@ class OpenInterval{
     }
 
     // Creates an empty interval.
-    /*@
-      @ ensures this.low == x;
-      @ ensures this.high == x;
-      @*/
+    //@ensures this.low == this.high;
     public OpenInterval(int x){
 	this.low = x;
 	this.high = x;
-    }
+    }	
      
     // Returns lower bound.
-   /*@ 
-     @ ensures \result == this.low;
-     @*/
+    //@ensures \result == this.low;
     public int getLow(){
 	return this.low;
     }
 
     // Returns upper bound.
-    /*@ 
-      @ ensures \result == this.high;
-      @*/
+    //@ensures \result == this.high;
     public int getHigh(){
 	return this.high;
     }
