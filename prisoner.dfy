@@ -65,23 +65,20 @@ method benda(L:array<int>, v0:int, v1:int) returns (x:int, y:int)
 method cycle(L:array<int>, i:int, a:int, s:set<int>) returns (x:int)
   // You must provide appropriate pre-conditions here.
   requires L != null
- 
   modifies L
+  requires 0 <= a < L.Length
+  requires 0 <= i < L.Length
+  requires s == (set z | i < z < L.Length && L[z] != z)
+  requires L[a] != i ==> a in s && a > i && L[a] in s && L[a] != a
   decreases s
-  requires 0 <= i < L.Length 
-  // does the x L[x] swap make sure x is still in range?  
-  //ensures forall d::0 <= d < L.Length ==> 0 <= L[d] < L.Length
-  requires forall c:: i < c < L.Length && L[c] != c ==> c in s
-  requires 0 <= a < L.Length && a <= L[a] < L.Length && L[a] != i && s != {}
-  //requires 0 <= a < L.Lengthi
-  requires 0 <= L[a] < L.Length
-  requires a in s && s - {a} < s   
-  //  requires forall c:: i in s ==> i in L[..]
+  // requires L[i] not in range but everything else is
+  // 
+  //requires L[a] != i ==> (0 <= L[a] < L.Length)
   // You must provide appropriate post-conditions here.
-  ensures 0 <= x < L.Length
-  ensures L[x] == i 
-//  ensures L[a] == i ==> x == a
-  
+  // ensures 0 <= x < L.Length && L[x] == i
+  // ensures L[a] == i ==> x == a
+  // proved that the original mind at i is in the body
+  // other ones as well!
 { 
   x := a;
   if (L[x] != i) { // mind and body do not match.
