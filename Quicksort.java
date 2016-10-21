@@ -5,7 +5,8 @@ public class Quicksort {
      @ modifies a[*];
      @ requires a != null;
      @ ensures (\forall int i; (0 < i && i < a.length) ==> a[i-1] <= a[i]);
-     @*/
+     @ ensures (\exists int k; 0 < k && k < a.length; (\forall int i; 0 < i && i < a.length; \old(a[k]) == a[k]));
+    @*/
     public static void sort(int[] a, int ulimit, int llimit)
     {
         quicksort(a, 0, a.length, ulimit, llimit);
