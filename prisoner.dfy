@@ -27,17 +27,15 @@ method benda(L:array<int>, v0:int, v1:int) returns (x:int, y:int)
   while (i < L.Length)
     // You must provide appropriate loop invariants here
     invariant 0 <= i <= L.Length
-    //invariant forall J::0 <= j < L.Length
-    // we want to do this but this might be too simple 
-    //invariant forall k::0 <= k < i ==> L[k] == k
-    invariant forall d::0 <= d < L.Length ==> 0 <= L[d] < L.Length
-    //invariant (x != v0) ==> (x == y && y == x)
-    //invariant (x == v0 && y == v1) || (x == v1 && y == v0)
-    invariant forall k::0 <= k < i && k < L.Length ==> x != L[k] 
-    invariant forall k::0 < k < i ==> L[k] in (set z | i < z < L.Length && L[z] != z)
-    invariant x == v0 && y == v1 
-    // invariant y == v1 && x == v0 ==> x == v0
-    {       
+    //invariant forall d::0 <= d < L.Length ==> 0 <= L[d] < L.Length
+    invariant (x != v0) ==> (x == y && y == x)
+    invariant (x == v0 && y == v1) || (x == v1 && y == v0)
+    //invariant forall k::0 <= k < i && k < L.Length ==> x != L[k] 
+    // need to prove x is in the set we input to cycle
+    invariant i != L.Length && L[i] != i ==> L[i] in (set z | i < z < L.Length && L[z] != z)
+    invariant i != L.Length && L[i] != i ==> x !in L[..]
+    invariant forall j::i <= j < L.Length ==> i <= L[j] < L.Length; 
+   {       
     if (L[i] != i) { // if mind of i does not match with body i
       x,L[i] := L[i],x; // swap mind between i and x
 
@@ -64,19 +62,17 @@ method benda(L:array<int>, v0:int, v1:int) returns (x:int, y:int)
 // https://en.wikipedia.org/wiki/Cyclic_permutation
 method cycle(L:array<int>, i:int, a:int, s:set<int>) returns (x:int)
   // You must provide appropriate pre-conditions here.
+  decreases s
   requires L != null
   modifies L
   requires 0 <= a < L.Length
   requires 0 <= i < L.Length
   requires s == (set z | i < z < L.Length && L[z] != z)
   requires L[a] != i ==> a in s && a > i && L[a] in s && L[a] != a
-  decreases s
-  // requires L[i] not in range but everything else is
-  // 
-  //requires L[a] != i ==> (0 <= L[a] < L.Length)
-  // You must provide appropriate post-conditions here.
-  // ensures 0 <= x < L.Length && L[x] == i
-  // ensures L[a] == i ==> x == a
+  requires L[a] != i ==> L.Length <= L[i]
+  requires forall k::0 <= k < L.Length ==> (k != i && 0 <= L[k] < L.Length)  
+  ensures 0 <= x < L.Length && L[x] == i
+  //ensures forall j::0 <= j < L.Length ==> L[j] == j && (last position of where the out of range val is)
   // proved that the original mind at i is in the body
   // other ones as well!
 { 
