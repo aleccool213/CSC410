@@ -27,14 +27,14 @@ method benda(L:array<int>, v0:int, v1:int) returns (x:int, y:int)
   while (i < L.Length)
     // You must provide appropriate loop invariants here
     invariant 0 <= i <= L.Length
-    //invariant forall d::0 <= d < L.Length ==> 0 <= L[d] < L.Length
-    invariant (x != v0) ==> (x == y && y == x)
-    invariant (x == v0 && y == v1) || (x == v1 && y == v0)
+    invariant forall j::0 <= j < L.Length ==> 0 <= L[j] < L.Length;
+    invariant x == v0 ==> (x == v0 && y == v1)
+    invariant x != v0 ==> (x == v1 && y == v0)
     //invariant forall k::0 <= k < i && k < L.Length ==> x != L[k] 
-    // need to prove x is in the set we input to cycle
-    invariant i != L.Length && L[i] != i ==> L[i] in (set z | i < z < L.Length && L[z] != z)
-    invariant i != L.Length && L[i] != i ==> x !in L[..]
-    invariant forall j::i <= j < L.Length ==> i <= L[j] < L.Length; 
+    // need to prove L[i] is in the set we input to cycle
+    invariant 0 <= i < L.Length && i < L[i] < L.Length ==> L[i] in (set z | i < z < L.Length && L[z] != z)
+    //invariant i != L.Length && L[i] != i ==> x !in L[..]
+    // teacher said i lol
    {       
     if (L[i] != i) { // if mind of i does not match with body i
       x,L[i] := L[i],x; // swap mind between i and x
@@ -44,7 +44,7 @@ method benda(L:array<int>, v0:int, v1:int) returns (x:int, y:int)
       // Detailed explainations can be found at: 
       // https://en.wikipedia.org/wiki/The_Prisoner_of_Benda (The proof).
       x := cycle(L,i,x,(set z | i < z < L.Length && L[z] != z));
-
+      
       y,L[x] := L[x],y; // swap minds between y and x
       x,L[x] := L[x],x; // put mind of x back to its body
       y,L[i] := L[i],y; // swap minds between y and i 
@@ -68,13 +68,14 @@ method cycle(L:array<int>, i:int, a:int, s:set<int>) returns (x:int)
   requires 0 <= a < L.Length
   requires 0 <= i < L.Length
   requires s == (set z | i < z < L.Length && L[z] != z)
-  requires L[a] != i ==> a in s && a > i && L[a] in s && L[a] != a
-  requires L[a] != i ==> L.Length <= L[i]
+  requires L[a] != i ==> a != i && a in s && L[a] in s && L[a] != a && L.Length <= L[i]
   requires forall k::0 <= k < L.Length ==> (k != i && 0 <= L[k] < L.Length)  
   ensures 0 <= x < L.Length && L[x] == i
-  //ensures forall j::0 <= j < L.Length ==> L[j] == j && (last position of where the out of range val is)
-  // proved that the original mind at i is in the body
-  // other ones as well!
+  ensures old(L[i]) == L[i]
+  ensures forall j::0 <= j < L.Length && j != x && j != i ==> L[j] == j
+  //ensures i == old(i)
+  ensures x in s
+  ensures forall k::0 <= k < L.Length ==> old(L[k]) in L[..]
 { 
   x := a;
   if (L[x] != i) { // mind and body do not match.
