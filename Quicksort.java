@@ -5,7 +5,7 @@ public class Quicksort {
      @ modifies a[*];
      @ requires a != null;
      @ ensures (\forall int i; (0 < i && i < a.length) ==> a[i-1] <= a[i]);
-     @*/
+    @*/
     public static void sort(int[] a, int ulimit, int llimit)
     {
         quicksort(a, 0, a.length, ulimit, llimit);
@@ -16,7 +16,6 @@ public class Quicksort {
     //@ requires a != null;
     //@ requires start >= 0 && stop <= a.length;
     //@ ensures (\forall int i; (0 < i && i < a.length) ==> a[i-1] <= a[i]);
-    // Write post-conditions for this method.
     private static void quicksort(int[] a, int start, int stop, int ulimit, int llimit)
     {
         if (stop - start > 1) {
@@ -31,7 +30,7 @@ public class Quicksort {
     //@ requires a != null;
     //@ requires start >= 0 && start < stop && stop <= a.length;
     //@ ensures \result < a.length && \result >= 0;
-    // Write post-conditions for this method.
+    // very similar post conditio to partition
     private static int pivot(int[] a, int start, int stop, int ulimit, int llimit)
     {
         int p = partition(a, a[start], start+1, stop, ulimit, llimit);
@@ -46,7 +45,7 @@ public class Quicksort {
     //@ requires start > 0 && stop <= a.length;
     //@ requires start == 0 && stop == 0 ==> start < stop;
     //@ ensures \result < a.length && \result >= 0;
-    // Write post-conditions for this method.
+    // ensures everything is swapped
     private static int partition(int[] a, int pivot, int start, int stop, int ulimit, int llimit)
     {
         if (start >= stop) 
